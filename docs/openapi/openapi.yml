@@ -1,0 +1,207 @@
+openapi: 3.0.0
+info:
+  title: The_13th_priority_api
+  version: '1.0'
+  description: 'API for The_13th_priority'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      description: 全ユーザー情報取得
+      operationId: GetUsers
+      responses:
+        '200':
+          description: ユーザー情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Users
+      description: ユーザー情報登録
+      operationId: CreateUser
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUserBody'
+      responses:
+        '201':
+          description: ユーザー情報登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal Server Error
+  /users/{id}:
+    put:
+      tags:
+        - Users
+      description: ユーザー情報1件更新
+      operationId: UpdateUser
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUserBody'
+      responses:
+        '200':
+          description: ユーザー情報更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized Error
+        '404':
+          description: Not Found
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal Server Error
+  /userinfo:
+    get:
+      tags:
+        - UserInfo
+      description: 自分のユーザー情報取得
+      operationId: GetLoginUser
+      responses:
+        '200':
+          description: ユーザー情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Userinfo'
+        '500':
+          description: Internal Server Error
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: Credentials or access token for API
+  parameters:
+    UserId:
+      name: id
+      in: path
+      description: ユーザーを識別するID
+      required: true
+      schema:
+        type: string
+    RequiredQueryUserId:
+      name: user_id
+      in: query
+      description: ユーザーを識別するID, クエリパラメータで使用
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    UpdateUserBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUser'
+    CreateUserBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateUser'
+  schemas:
+    UserId:
+      description: ユーザーのID
+      properties:
+        id:
+          type: string
+          example: 'fd7e7dd8-8ea6-4af9-8d56-11b8ef4486c9'
+    CompletedSignUp:
+      description: ユーザーが本登録済みかどうか
+      properties:
+        completed_sign_up:
+          type: boolean
+    User:
+      description: レスポンスで返すユーザー情報
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+        - $ref: '#/components/schemas/UserId'
+      required:
+        - id
+    Userinfo:
+      description: ログインユーザーの情報
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+        - $ref: '#/components/schemas/UserId'
+        - $ref: '#/components/schemas/CompletedSignUp'
+      required:
+        - id
+        - completed_sign_up
+    CreateUser:
+      description: 登録する際にリクエストに含めるユーザー情報
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+        - $ref: '#/components/schemas/CompletedSignUp'
+    UpdateUser:
+      description: 更新する際にリクエストに含めるユーザー情報
+      allOf:
+        - $ref: '#/components/schemas/UserBase'
+        - $ref: '#/components/schemas/CompletedSignUp'
+    UserBase:
+      description: ユーザー関連スキーマの共通部分
+      type: object
+      required:
+        - slack_id
+        - full_name
+        - nickname
+        - email
+        - is_admin
+      properties:
+        slack_id:
+          type: string
+          example: 'fffdsftdffsd'
+        full_name:
+          type: string
+          example: '2.0期生 山田太郎'
+        nickname:
+          type: string
+          example: '山風'
+        email:
+          type: string
+          example: 'saikan1@email.com'
+        hobby:
+          type: string
+          example: 'スニーカー'
+        introduction:
+          type: string
+          example: 'スニーカーが大好きです。'
+        is_admin:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+tags:
+  - name: Users
+    description: ユーザーに関するAPI
+  - name: UserInfo
+    description: ログイン済みのユーザーに関するAPI
