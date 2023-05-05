@@ -85,6 +85,70 @@ paths:
                 $ref: '#/components/schemas/Userinfo'
         '500':
           description: Internal Server Error
+  /items:
+    get:
+      tags:
+        - Item
+      description: 商品の情報を全て取得する
+      operationId: GetItems
+      responses:
+        '200':
+          description: 提出した作品とその成績の情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Items'
+        '500':
+          description: Internal Server Error
+  /item/{id}:
+    get:
+      tags:
+        - Item
+      description: 一件の知識の情報を取得する
+      operationId: GetKnowledge
+      responses:
+        '200':
+          description: 一件の知識の情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Knowledge'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /Knowledges:
+    get:
+      tags:
+        - Knowledge
+      description: 商品の情報を全て取得する
+      operationId: GetKnowledges
+      responses:
+        '200':
+          description: 提出した作品とその成績の情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Knowledges'
+        '500':
+          description: Internal Server Error
+  /knowledge/{id}:
+    get:
+      tags:
+        - Knowledge
+      description: 一件の商品の情報を取得する
+      operationId: GetItem
+      responses:
+        '200':
+          description: 提出した作品とその成績の情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
 components:
   securitySchemes:
     Bearer:
@@ -98,7 +162,7 @@ components:
       description: ユーザーを識別するID
       required: true
       schema:
-        type: string
+        type: number
     RequiredQueryUserId:
       name: user_id
       in: query
@@ -189,6 +253,231 @@ components:
         is_admin:
           type: boolean
           example: true
+    Items:
+      description: 全ての商品情報
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+            example: 1
+          primary:
+            type: number
+            example: 1000
+          img:
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          title:
+            type: string
+            example: 'MacbookPro 2018 core i7 2.6GHz 16GB 512GB'
+          owner:
+            type: string
+            example: '@bkristastucchio'
+          is_bookmark:
+            type: boolean
+            example: false
+          state: 
+            type: number
+            example: 1
+    Item:
+      description: 一つの商品情報
+      type: object
+      properties: 
+        id:
+          type: number
+          example: 1
+        price: 
+          type: number
+          example: 1000
+        title: 
+          type: string
+          example: 'MacbookPro 2018 core i7 2.6GHz 16GB 512GB'
+        state: 
+          type: number
+          example: 1
+        is_bookmark:
+          type: boolean
+          example: false
+        ownerInfo:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 1
+            name:
+              type: string
+              example: 'かしけん'
+            img:
+              type: string
+              example: 'logo'
+        img:
+          type: array
+          items: 
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+        comments:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id: 
+                type: number
+                example: 1
+              user_name:
+                type: string
+                example: 'tarp'
+              img:
+                type: string
+                example: 'logo'
+              content:
+                type: string
+                example: 'これってスペックいいほうなんですかね？'
+        transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
+                type: number
+                example: 1
+              start_date:
+                type: number
+                example: '2022/02/11'
+              points:
+                type: number
+                example: 1000
+              borrower:
+                type: string
+                example: 'kashiken'
+              return_date:
+                type: string
+                example: '2022/4/14'
+    Knowledges:
+      description: 全ての知識情報
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - title
+          - owner
+        properties:
+          id:
+            type: number
+            example: 1
+          img:
+            type: string
+            example: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45'
+          title:
+            type: string
+            example: 'Breakfast'
+          owner:
+            type: string
+            example: '@bkristastucchio'
+          participants:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'tarp'
+                img:
+                  type: string
+                  example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          is_bookmark:
+            type: boolean
+            example: false
+    Knowledge:
+      description: 一つの知識情報
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        price:
+          type: number
+          example: 1000
+        img:
+          type: array
+          items: 
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+        title:
+          type: string
+          example: 'MacbookPro 2018 core i7 2.6GHz 16GB 512GB'
+        is_bookmark:
+          type: boolean
+          example: false
+        ownerInfo:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              name: 
+                type: string
+                example: 'かしけん'
+              img:
+                type: string
+                example: 'logo'
+        comments:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id: 
+                type: number
+                example: 1
+              user_name:
+                type: string
+                example: 'tarp'
+              img:
+                type: string
+                example: 'logo'
+              content:
+                type: string
+                example: 'これってスペックいいほうなんですかね？'
+        appreciation:
+          type: array
+          items:
+            type: object
+            properties:
+              user_id:
+                type: number
+                example: 1
+              user_name:
+                type: string
+                example: 'tarp'
+              img:
+                type: string
+                example: 'logo'
+              content:
+                type: string
+                example: 'これってスペックいいほうなんですかね？'
+        transactions:
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
+                type: number
+                example: 1
+              book_date:
+                type: number
+                example: '2022/02/11'
+              points:
+                type: number
+                example: 1000
+              booker:
+                type: string
+                example: 'kashiken'
+              hold_status:
+                type: string
+                example: '開催済み'
     Error:
       type: object
       required:
@@ -205,3 +494,7 @@ tags:
     description: ユーザーに関するAPI
   - name: UserInfo
     description: ログイン済みのユーザーに関するAPI
+  - name: Item
+    description: 商品に関するAPI
+  - name: Knowledge
+    description: ナレッジに関するAPI
