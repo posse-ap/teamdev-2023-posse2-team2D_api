@@ -147,46 +147,92 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-  /tradingItems:
+  /borrowingItems:
     get:
       tags:
         - Trading
-      description: 商品取引情報取得
-      operationId: GettradingItems
+      description: 商品借用情報取得
+      operationId: GetborrowingItems
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
         '200':
-          description: 商品取引情報取得成功
+          description: 商品借用情報取得成功
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/tradingItems'
+                  $ref: '#/components/schemas/borrowingItems'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /tradingKnowledges:
+  /rentingItems:
     get:
       tags:
         - Trading
-      description: ナレッジ取引情報取得
-      operationId: GettradingKnowledges
+      description: 商品貸出情報取得
+      operationId: GetrentingItems
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
         '200':
-          description: ナレッジ取引情報取得成功
+          description: 商品貸出情報取得成功
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/tradingKnowledges'
+                  $ref: '#/components/schemas/rentingItems'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /borrowingKnowledges:
+    get:
+      tags:
+        - Trading
+      description: ナレッジ借用情報取得
+      operationId: GetborrowingKnowledges
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: ナレッジ借用情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/borrowingKnowledges'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /rentingKnowledges:
+    get:
+      tags:
+        - Trading
+      description: ナレッジ貸出情報取得
+      operationId: GetrentingKnowledges
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: ナレッジ貸出情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/rentingKnowledges'
         default:
           description: unexpected error
           content:
@@ -522,7 +568,7 @@ components:
               hold_status:
                 type: string
                 example: '開催済み'
-    tradingItems:
+    borrowingItems:
       type: array
       items:
         type: object
@@ -533,6 +579,10 @@ components:
           name:
             type: string
             example: 'Breakfast'
+          borrow_status:
+            description: 1=借用中,2=返却済み
+            type: number
+            example: 1
           points:
             type: number
             example: 1000
@@ -548,7 +598,7 @@ components:
           created_at:
             type: string
             example: '2022/02/11'
-    tradingKnowledges:
+    rentingItems:
       type: array
       items:
         type: object
@@ -559,10 +609,74 @@ components:
           name:
             type: string
             example: 'Breakfast'
+          rent_status:
+            description: 1=貸出中,2=貸出申請中
+            type: number
+            example: 1
+          points:
+            type: number
+            example: 1000
+          borrower:
+            type: string
+            example: 'kashiken'
+          img:
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          is_display:
+            type: boolean
+            example: false
+          created_at:
+            type: string
+            example: '2022/02/11'
+    borrowingKnowledges:
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            type: number
+            example: 1
+          name:
+            type: string
+            example: 'Breakfast'
+          borrow_status:
+            description: 1=借用中,2=返却済み
+            type: number
+            example: 1
           points:
             type: number
             example: 1000
           booker:
+            type: string
+            example: 'kashiken'
+          img:
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          is_display:
+            type: boolean
+            example: false
+          created_at:
+            type: string
+            example: '2022/02/11'
+    rentingKnowledges:
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            type: number
+            example: 1
+          name:
+            type: string
+            example: 'Breakfast'
+          rent_status:
+            description: 1=貸出中,2=貸出申請中
+            type: number
+            example: 1
+          points:
+            type: number
+            example: 1000
+          participant:
             type: string
             example: 'kashiken'
           img:
