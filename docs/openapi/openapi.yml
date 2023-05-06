@@ -110,7 +110,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Knowledge'
+                $ref: '#/components/schemas/Item'
         '404':
           description: Not Found
         '500':
@@ -142,7 +142,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/Knowledge'
         '404':
           description: Not Found
         '500':
@@ -337,6 +337,21 @@ paths:
           description: Unauthorized Error
         '404':
           description: Not Found
+        '500':
+          description: Internal Server Error
+  /itemsManagement:
+    get:
+      tags:
+        - Admin
+      description: 商品の情報を全て取得する
+      operationId: GetallItems
+      responses:
+        '200':
+          description: 商品の情報全て取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/itemsManagement'
         '500':
           description: Internal Server Error
 components:
@@ -859,7 +874,67 @@ components:
           format: int32
         message:
           type: string
-tags:
+    itemsManagement:
+      type: array
+      items:
+        description: 全ての商品情報
+        type: object
+        properties: 
+          id:
+            type: number
+            example: 1
+          title: 
+            type: string
+            example: 'MacbookPro 2018 core i7 2.6GHz 16GB 512GB'
+          price: 
+            type: number
+            example: 1000
+          status:
+            description: 1,貸出中,2,出品中,3,公開停止中
+            type: number
+            example: 1
+          ownerInfo:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              name:
+                type: string
+                example: 'かしけん'
+              img:
+                type: string
+                example: 'logo'
+          kind:
+            description: 1=商品,2=ナレッジ
+            type: number
+            example: 1
+          img:
+            type: array
+            items: 
+              type: string
+              example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          transactions:
+            type: array
+            items:
+              type: object
+              properties:
+                id: 
+                  type: number
+                  example: 1
+                start_date:
+                  type: number
+                  example: '2022/02/11'
+                points:
+                  type: number
+                  example: 1000
+                borrower:
+                  type: string
+                  example: 'kashiken'
+                return_date:
+                  type: string
+                  example: '2022/4/14'
+tags:  
   - name: Users
     description: ユーザーに関するAPI
   - name: UserInfo
