@@ -147,6 +147,52 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
+  /tradingItems:
+    get:
+      tags:
+        - Trading
+      description: 商品取引情報取得
+      operationId: GettradingItems
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: 商品取引情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tradingItems'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /tradingKnowledges:
+    get:
+      tags:
+        - Trading
+      description: ナレッジ取引情報取得
+      operationId: GettradingKnowledges
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: ナレッジ取引情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/tradingKnowledges'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   securitySchemes:
     Bearer:
@@ -465,7 +511,7 @@ components:
                 type: number
                 example: 1
               book_date:
-                type: number
+                type: string
                 example: '2022/02/11'
               points:
                 type: number
@@ -476,6 +522,58 @@ components:
               hold_status:
                 type: string
                 example: '開催済み'
+    tradingItems:
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            type: number
+            example: 1
+          name:
+            type: string
+            example: 'Breakfast'
+          points:
+            type: number
+            example: 1000
+          owner:
+            type: string
+            example: 'kashiken'
+          img:
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          is_display:
+            type: boolean
+            example: false
+          created_at:
+            type: string
+            example: '2022/02/11'
+    tradingKnowledges:
+      type: array
+      items:
+        type: object
+        properties:
+          id: 
+            type: number
+            example: 1
+          name:
+            type: string
+            example: 'Breakfast'
+          points:
+            type: number
+            example: 1000
+          booker:
+            type: string
+            example: 'kashiken'
+          img:
+            type: string
+            example: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
+          is_display:
+            type: boolean
+            example: false
+          created_at:
+            type: string
+            example: '2022/02/11'
     Error:
       type: object
       required:
@@ -496,3 +594,5 @@ tags:
     description: 商品に関するAPI
   - name: Knowledge
     description: ナレッジに関するAPI
+  - name: Trading
+    description: 取引に関するAPI
