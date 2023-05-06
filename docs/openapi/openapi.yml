@@ -153,6 +153,8 @@ paths:
         - Trading
       description: 商品取引情報取得
       operationId: GettradingItems
+      parameters:
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           description: 商品取引情報取得成功
@@ -174,6 +176,8 @@ paths:
         - Trading
       description: ナレッジ取引情報取得
       operationId: GettradingKnowledges
+      parameters:
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           description: ナレッジ取引情報取得成功
@@ -526,9 +530,6 @@ components:
           id: 
             type: number
             example: 1
-          created_at:
-            type: string
-            example: '2022/02/11'
           name:
             type: string
             example: 'Breakfast'
@@ -544,6 +545,9 @@ components:
           is_display:
             type: boolean
             example: false
+          created_at:
+            type: string
+            example: '2022/02/11'
     tradingKnowledges:
       type: array
       items:
@@ -552,9 +556,6 @@ components:
           id: 
             type: number
             example: 1
-          created_at:
-            type: string
-            example: '2022/02/11'
           name:
             type: string
             example: 'Breakfast'
@@ -570,6 +571,9 @@ components:
           is_display:
             type: boolean
             example: false
+          created_at:
+            type: string
+            example: '2022/02/11'
     Error:
       type: object
       required:
