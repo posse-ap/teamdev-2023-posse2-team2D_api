@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('is_admin');
             $table->string('slack_id');
+            $table->string('image');
             $table->integer('supply_points');
             $table->integer('get_points');
             $table->integer('pending_points');
