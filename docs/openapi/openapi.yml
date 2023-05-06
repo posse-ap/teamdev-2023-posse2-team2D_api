@@ -880,12 +880,17 @@ components:
         description: 全ての商品情報
         type: object
         properties: 
-          price: 
+          id:
             type: number
-            example: 1000
+            example: 1
           title: 
             type: string
             example: 'MacbookPro 2018 core i7 2.6GHz 16GB 512GB'
+          price: 
+            type: number
+            example: 1000
+          status:
+            description: 1,貸出中,2,出品中,3,公開停止中
           ownerInfo:
             type: object
             properties:
@@ -898,7 +903,7 @@ components:
               img:
                 type: string
                 example: 'logo'
-          is_item:
+          kind:
             description: 1=商品,2=ナレッジ
             type: number
             example: 1
