@@ -487,7 +487,7 @@ components:
           id:
             type: number
             example: 1
-          primary:
+          price:
             type: number
             example: 1000
           img:

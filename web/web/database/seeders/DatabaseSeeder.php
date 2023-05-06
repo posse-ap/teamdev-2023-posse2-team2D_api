@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             ItemTableSeeder::class,
             RequestTableSeeder::class,
+            ItemImageTableSeeder::class,
+            TransactionTableSeeder::class,
+            CommentTableSeeder::class,
         ]);
     }
 }

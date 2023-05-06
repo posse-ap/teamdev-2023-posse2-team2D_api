@@ -20,3 +20,4 @@ use App\Http\Controllers\ItemController;
 // });
 
 Route::get('/homepage', 'App\Http\Controllers\ItemController@index')->name('item');
+Route::get('/item/{id}', 'App\Http\Controllers\ItemController@getItemWithRelations')->name('item');
