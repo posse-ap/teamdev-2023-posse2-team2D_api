@@ -193,6 +193,106 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /requests:
+    get:
+      tags:
+        - Request
+      description: リクエスト情報取得
+      operationId: Getrequests
+      responses:
+        '200':
+          description: リクエスト情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/requests'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - Request
+      description: リクエスト情報登録
+      operationId: CreateRequest
+      requestBody:
+        $ref: '#/components/requestBodies/CreateRequestBody'
+      responses:
+        '201':
+          description: リクエスト情報登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/requests'
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal Server Error
+  /request/{id}:
+    get:
+      tags:
+        - Request
+      description: リクエスト詳細情報取得
+      operationId: Getrequest
+      responses:
+        '200':
+          description: リクエスト詳細情報取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/request'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Request
+      description: リクエスト情報1件更新
+      operationId: Updaterequest
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateRequestBody'
+      responses:
+        '200':
+          description: リクエスト情報更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/request'
+        '401':
+          description: Unauthorized Error
+        '404':
+          description: Not Found
+        '422':
+          description: Unprocessable Entity
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Request
+      description: リクエスト削除
+      operationId: DeleteRequest
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+      responses:
+        '204':
+          description: 手本削除成功
+        '401':
+          description: Unauthorized Error
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
 components:
   securitySchemes:
     Bearer:
@@ -214,6 +314,14 @@ components:
       required: true
       schema:
         type: string
+    RequestId:
+      name: id
+      in: path
+      description: リクエストを識別するID
+      required: true
+      schema:
+        type: integer
+        example: 1
   requestBodies:
     UpdateUserBody:
       required: true
@@ -227,6 +335,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateUser'
+    UpdateRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Updaterequest'
+    CreateRequestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Createrequest'
   schemas:
     UserId:
       description: ユーザーのID
@@ -574,6 +694,46 @@ components:
           created_at:
             type: string
             example: '2022/02/11'
+    requests:
+      type: array
+      items:
+        type: object
+        properties:
+          request_id: 
+            type: number
+            example: 1
+          name:
+            type: string
+            example: 'Breakfast'
+          detail:
+            type: string
+            example: チーム開発のために二ヶ月ほどお借りしたいなと思っています！
+          is_mine:
+            type: boolean
+            example: false
+    Createrequest:
+      description: 登録する際にリクエストに含めるユーザー情報
+      allOf:
+        - $ref: '#/components/schemas/CompletedSignUp'
+    request:
+      type: object
+      properties:
+        request_id: 
+          type: number
+          example: 1
+        name:
+          type: string
+          example: 'Breakfast'
+        detail:
+          type: string
+          example: チーム開発のために二ヶ月ほどお借りしたいなと思っています！
+        is_mine:
+          type: boolean
+          example: false
+    Updaterequest:
+      description: 登録する際にリクエストに含める情報
+      allOf:
+        - $ref: '#/components/schemas/CompletedSignUp'
     Error:
       type: object
       required:
