@@ -891,6 +891,8 @@ components:
             example: 1000
           status:
             description: 1,貸出中,2,出品中,3,公開停止中
+            type: number
+            example: 1
           ownerInfo:
             type: object
             properties:
