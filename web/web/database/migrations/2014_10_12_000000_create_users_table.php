@@ -15,12 +15,21 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('email');
             $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->string('name');
+            $table->boolean('is_admin');
+            $table->string('slack_id');
+            $table->string('image');
+            $table->integer('supply_points');
+            $table->integer('get_points');
+            $table->integer('pending_points');
+            $table->string('position')->nullable();
+            $table->string('hobby');
+            $table->string('profile');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

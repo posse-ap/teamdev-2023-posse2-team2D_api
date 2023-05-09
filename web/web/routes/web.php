@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\BookmarkController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/items', 'App\Http\Controllers\ItemController@index')->name('items');
+Route::get('/item/{id}', 'App\Http\Controllers\ItemController@getItemWithRelations')->name('item');
+
+Route::post('/bookmarks/{id}', 'App\Http\Controllers\BookmarkController@bookmark')->name('bookmark');
+Route::delete('/bookmarks/{id}', 'App\Http\Controllers\BookmarkController@unbookmark')->name('unbookmark');
+

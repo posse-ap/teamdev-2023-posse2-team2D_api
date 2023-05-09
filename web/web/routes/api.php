@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ItemController;
+use App\Http\Controllers\BookmarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/items', 'App\Http\Controllers\ItemController@index')->name('items');
+Route::get('/item/{id}', 'App\Http\Controllers\ItemController@getItemWithRelations')->name('item');
+
+Route::post('/bookmarks/{id}', 'App\Http\Controllers\BookmarkController@bookmark')->name('bookmark');
+Route::delete('/bookmarks/{id}', 'App\Http\Controllers\BookmarkController@unbookmark')->name('unbookmark');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
