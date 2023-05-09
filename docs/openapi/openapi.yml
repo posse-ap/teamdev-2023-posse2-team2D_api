@@ -102,8 +102,10 @@ paths:
     get:
       tags:
         - Item
-      description: 一件の知識の情報を取得する
-      operationId: GetKnowledge
+      description: 一件の商品の情報を取得する
+      operationId: GetItem
+      parameters:
+        - $ref: '#/components/parameters/ItemId'
       responses:
         '200':
           description: 一件の知識の情報取得成功
@@ -115,12 +117,14 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-  /Knowledges:
+  /knowledges:
     get:
       tags:
         - Knowledge
-      description: 商品の情報を全て取得する
+      description: ナレッジの情報を全て取得する
       operationId: GetKnowledges
+      parameters:
+        - $ref: '#/components/parameters/UserId'
       responses:
         '200':
           description: 提出した作品とその成績の情報取得成功
@@ -135,7 +139,9 @@ paths:
       tags:
         - Knowledge
       description: 一件の商品の情報を取得する
-      operationId: GetItem
+      operationId: GetKnowledge
+      parameters:
+        - $ref: '#/components/parameters/KnowledgeId'
       responses:
         '200':
           description: 提出した作品とその成績の情報取得成功
@@ -152,7 +158,7 @@ paths:
       tags:
         - Trading
       description: 商品借用情報取得
-      operationId: GetborrowingItems
+      operationId: GetBorrowingItems
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
@@ -175,7 +181,7 @@ paths:
       tags:
         - Trading
       description: 商品貸出情報取得
-      operationId: GetrentingItems
+      operationId: GetRentingItems
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
@@ -198,7 +204,7 @@ paths:
       tags:
         - Trading
       description: ナレッジ借用情報取得
-      operationId: GetborrowingKnowledges
+      operationId: GetBorrowingKnowledges
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
@@ -221,7 +227,7 @@ paths:
       tags:
         - Trading
       description: ナレッジ貸出情報取得
-      operationId: GetrentingKnowledges
+      operationId: GetRentingKnowledges
       parameters:
         - $ref: '#/components/parameters/UserId'
       responses:
@@ -244,7 +250,7 @@ paths:
       tags:
         - Request
       description: リクエスト情報取得
-      operationId: Getrequests
+      operationId: GetRequests
       responses:
         '200':
           description: リクエスト情報取得成功
@@ -283,7 +289,9 @@ paths:
       tags:
         - Request
       description: リクエスト詳細情報取得
-      operationId: Getrequest
+      operationId: GetRequest
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
       responses:
         '200':
           description: リクエスト詳細情報取得成功
@@ -303,7 +311,7 @@ paths:
       tags:
         - Request
       description: リクエスト情報1件更新
-      operationId: Updaterequest
+      operationId: UpdateRequest
       parameters:
         - $ref: '#/components/parameters/UserId'
       requestBody:
@@ -344,7 +352,7 @@ paths:
       tags:
         - Admin
       description: 商品の情報を全て取得する
-      operationId: GetallItems
+      operationId: GetAllItems
       responses:
         '200':
           description: 商品の情報全て取得成功
@@ -375,6 +383,22 @@ components:
       required: true
       schema:
         type: string
+    ItemId:
+      name: id
+      in: path
+      description: 商品を識別するID
+      required: true
+      schema:
+        type: integer
+        example: 1
+    KnowledgeId:
+      name: id
+      in: path
+      description: ナレッジを識別するID
+      required: true
+      schema:
+        type: integer
+        example: 1
     RequestId:
       name: id
       in: path
@@ -401,13 +425,13 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Updaterequest'
+            $ref: '#/components/schemas/UpdateRequest'
     CreateRequestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Createrequest'
+            $ref: '#/components/schemas/CreateRequest'
   schemas:
     UserId:
       description: ユーザーのID
@@ -840,7 +864,7 @@ components:
           is_mine:
             type: boolean
             example: false
-    Createrequest:
+    CreateRequest:
       description: 登録する際にリクエストに含めるユーザー情報
       allOf:
         - $ref: '#/components/schemas/CompletedSignUp'
@@ -859,7 +883,7 @@ components:
         is_mine:
           type: boolean
           example: false
-    Updaterequest:
+    UpdateRequest:
       description: 登録する際にリクエストに含める情報
       allOf:
         - $ref: '#/components/schemas/CompletedSignUp'
