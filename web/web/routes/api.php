@@ -16,7 +16,7 @@ use App\Http\Controllers\BookmarkController;
 |
 */
 
-Route::get('/homepage', 'App\Http\Controllers\ItemController@index')->name('item');
+Route::get('/items', 'App\Http\Controllers\ItemController@index')->name('items');
 Route::get('/item/{id}', 'App\Http\Controllers\ItemController@getItemWithRelations')->name('item');
 
 Route::post('/bookmarks/{id}', 'App\Http\Controllers\BookmarkController@bookmark')->name('bookmark');
