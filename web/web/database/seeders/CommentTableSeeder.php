@@ -18,11 +18,13 @@ class CommentTableSeeder extends Seeder
 
         for ($i = 1; $i <= 10; $i++) {
             for ($j = 1; $j <= 3; $j++) {
+                $status = $faker->randomElement([1, 2]);
                 DB::table('comments')->insert([
                     'item_id' => $i,
-                    'comment' => $faker->realText(100),
+                    'status' => $status,
+                    'content' => $faker->realText(100),
                     'points' => $faker->numberBetween(1, 5),
-                    'commenter_id' => $faker->numberBetween(1, 10),
+                    'user_id' => $faker->numberBetween(1, 10),
                     'created_at' => $faker->dateTimeThisMonth,
                     'updated_at' => $faker->dateTimeThisMonth,
                 ]);

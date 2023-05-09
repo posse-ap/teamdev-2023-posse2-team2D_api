@@ -14,15 +14,15 @@ class Item extends Model
         return $this->hasMany(ItemImage::class);
     }
     public function owner()
-{
+    {
     return $this->belongsTo(User::class, 'owner_user_id');
-}
+    }
     public function toArray()
-{
+    {
     $itemImages = $this->itemImages()->select('id', 'item_id', 'image_url')->get();
     $image = count($itemImages) ? $itemImages[0]->image_url : '';
     $owner = $this->owner_user_id ? '@' . $this->owner->name : '';
-    $state = $this->status === 0 ? 0 : 1;
+    $state = $this->status === 0 ? 0 : ($this->status === 1 ? 1 : 2);
 
     return [
         'id' => $this->id,
@@ -33,7 +33,7 @@ class Item extends Model
         'is_bookmark' => false,
         'state' => $state,
     ];
-}
+    }
     public function transactions()
     {
         return $this->hasMany('App\Models\Transaction', 'item_id', 'id');

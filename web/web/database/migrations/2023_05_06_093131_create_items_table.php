@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('points');
             $table->foreignId('owner_user_id')->constrained('users');
             $table->foreignId('request_id')->nullable()->constrained();
-            $table->integer('type');
+            $table->integer('type'); //1を商品、0をナレッジとする
             $table->timestamps();
             $table->softDeletes();
         });

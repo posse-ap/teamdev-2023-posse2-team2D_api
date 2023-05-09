@@ -16,7 +16,7 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $items = Item::with('owner', 'itemImages')->get()->map(function ($item) {
+        $items = Item::with('owner', 'itemImages')->where('type', 1)->get()->map(function ($item) {
             return $item->toArray();
         });
     
@@ -48,8 +48,8 @@ class ItemController extends Controller
         
         $comment_data = [];
         foreach($comments as $comment){
-            $user_info = User::find($comment->commenter_id);
-            array_push($comment_data, ["user_id" => $user_info->id, "user_name" => $user_info->name, "img" => $user_info->image, "content" => $comment->comment]);
+            $user_info = User::find($comment->user_id);
+            array_push($comment_data, ["user_id" => $user_info->id, "user_name" => $user_info->name, "img" => $user_info->image, "content" => $comment->content]);
         }
     
         // レスポンスとして返すデータを作成
