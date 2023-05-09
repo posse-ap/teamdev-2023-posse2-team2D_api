@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             ItemImageTableSeeder::class,
             TransactionTableSeeder::class,
             CommentTableSeeder::class,
+            BookmarkTableSeeder::class,
         ]);
     }
 }

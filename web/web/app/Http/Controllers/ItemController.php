@@ -31,11 +31,21 @@ class ItemController extends Controller
         $item = Item::findOrFail($id);
     
         // Itemに紐づくTransactionの情報を取得
-        $transaction = DB::table('transactions')->join('users', 'users.id', '=', 'transactions.borrower_user_id')->select('transactions.*', 'users.name')->where('item_id', $id)->first();
-    
+        $transactions = DB::table('transactions')->join('users', 'users.id', '=', 'transactions.borrower_user_id')->select('transactions.*', 'users.name')->where('item_id', $id)->get();
+        
+        $transaction_data = [];
+        foreach($transactions as $transaction){
+            array_push($transaction_data, [
+            'id' => $transaction->id,
+            'start_date' => $transaction->start_date,
+            'points' => $transaction->points,
+            'borrower' => $transaction->name,
+            'return_date' => $transaction->end_date,]);
+        }
+        
         // Itemに紐づくCommentの情報を取得
         $comments = Comment::where('item_id', $id)->get();
-
+        
         $comment_data = [];
         foreach($comments as $comment){
             $user_info = User::find($comment->commenter_id);
@@ -64,13 +74,7 @@ class ItemController extends Controller
             ],
             'img' => $images,
             'comments' => $comment_data,
-            'transactions' => [
-                'id' => $transaction->item_id,
-                'start_date' => $transaction->start_date,
-                'points' => $transaction->points,
-                'borrower' => $transaction->name,
-                'return_date' => $transaction->end_date,
-            ],
+            'transactions' => $transaction_data,
         ];
     
         return response()->json($data);
