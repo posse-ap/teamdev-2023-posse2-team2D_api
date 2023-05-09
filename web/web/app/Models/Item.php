@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,38 +7,68 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     protected $table = 'items';
-    
+
     public function itemImages()
     {
         return $this->hasMany(ItemImage::class);
     }
+
     public function owner()
     {
-    return $this->belongsTo(User::class, 'owner_user_id');
+        return $this->belongsTo(User::class, 'owner_user_id');
     }
-    public function toArray()
-    {
-    $itemImages = $this->itemImages()->select('id', 'item_id', 'image_url')->get();
-    $image = count($itemImages) ? $itemImages[0]->image_url : '';
-    $owner = $this->owner_user_id ? '@' . $this->owner->name : '';
-    $state = $this->status === 0 ? 0 : ($this->status === 1 ? 1 : 2);
 
-    return [
-        'id' => $this->id,
-        'price' => $this->points,
-        'img' => $image,
-        'title' => $this->name,
-        'owner' => $owner,
-        'is_bookmark' => false,
-        'state' => $state,
-    ];
-    }
     public function transactions()
     {
         return $this->hasMany('App\Models\Transaction', 'item_id', 'id');
     }
+
     public function comments()
     {
         return $this->hasMany('App\Models\Comment', 'item_id', 'id');
+    }
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
+    public function is_bookmark()
+    {
+        $bookmark = $this->bookmarks()->where('user_id', 3)->first();
+
+        if ($bookmark && $bookmark->item_id === $this->id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function withIsBookmark()
+    {
+        $items = self::all();
+
+        return $items->map(function ($item) {
+            $item->is_bookmark = $item->is_bookmark();
+            return $item;
+        });
+    }
+
+    public function toArray()
+    {
+        $itemImages = $this->itemImages()->select('id', 'item_id', 'image_url')->get();
+        $image = count($itemImages) ? $itemImages[0]->image_url : '';
+        $owner = $this->owner_user_id ? '@' . $this->owner->name : '';
+        $state = $this->status === 0 ? 0 : ($this->status === 1 ? 1 : 2);
+
+        return [
+            'id' => $this->id,
+            'price' => $this->points,
+            'img' => $image,
+            'title' => $this->name,
+            'owner' => $owner,
+            'is_bookmark' => $this->is_bookmark(),
+            'state' => $state,
+        ];
     }
 }
